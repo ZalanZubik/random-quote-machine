@@ -1,13 +1,22 @@
 import React from 'react';
+import { Button, Card } from 'react-bootstrap';
+import { FaTwitter } from 'react-icons/fa';
 
 const QuoteMachine = ({quote, author, assignNewQuoteIndex}) => (
-    <div>
-        <p>
+    <Card style={{
+        width: '650px',
+        margin: 'auto',
+        textAlign: 'center'
+    }}>
+        <Card.Body>
             {quote}
             {author}
-            <button onClick = {assignNewQuoteIndex}>New Quote</button>
-        </p>
-    </div>
+            <div>
+                <a href={encodeURI(`https://twitter.com/intent/tweet?text="${quote}" - ${author}&hashtags=dailyquotes`)} target="_blank" rel="noopener noreferrer"><FaTwitter style={{fontSize: '2rem'}}/></a>
+                <Button variant="outline-success" onClick = {assignNewQuoteIndex}>New Quote</Button>
+            </div>
+        </Card.Body>
+    </Card>
 );
 
 export default QuoteMachine;

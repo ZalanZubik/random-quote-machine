@@ -1,6 +1,7 @@
 import React from 'react';
 import QuotesData from './quotes.json';
 import QuoteMachine from './components/QuoteMachine.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends React.Component {
   constructor(props) {
