@@ -1,5 +1,4 @@
 import React from 'react';
-import QuotesData from './quotes.json';
 import QuoteMachine from './components/QuoteMachine.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -7,7 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      quotes: QuotesData,
+      quotes: [],
       quoteIndex: null
     }
     
@@ -15,8 +14,13 @@ class App extends React.Component {
     this.assignNewQuoteIndex = this.assignNewQuoteIndex.bind(this);
   }
 
-  componentWillMount() {
-    this.setState(this.assignNewQuoteIndex);
+  componentDidMount() {
+    fetch('https://gist.githubusercontent.com/ZalanZubik/92cac46a0c4a325829a3e5250fa79268/raw/868d6f9342106ac084825e9f5f75dde054d05a34/quotes.json')
+      .then(response => response.json())
+      .then(quotes => this.setState({ quotes }, this.assignNewQuoteIndex))
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   generateRandomQuoteIndex() {
@@ -32,10 +36,21 @@ class App extends React.Component {
     this.setState({ quoteIndex: this.generateRandomQuoteIndex() });
   }
 
+  get selectedQuote() {
+    if (!this.state.quotes.length || !Number.isInteger(this.state.quoteIndex)) {
+      return undefined;
+    }
+    else {
+      return this.state.quotes[this.state.quoteIndex];
+    }
+  }
+
   render() {
     return (
       <div id="quote-box">
-        <QuoteMachine quote = {this.state.quotes[this.state.quoteIndex].quote} author = {this.state.quotes[this.state.quoteIndex].author}assignNewQuoteIndex = {this.assignNewQuoteIndex} />
+        {this.selectedQuote ?
+          <QuoteMachine selectedQuote={this.selectedQuote} assignNewQuoteIndex={this.assignNewQuoteIndex} />
+          : null}
       </div>
     )
   }
